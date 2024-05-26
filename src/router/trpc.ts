@@ -8,7 +8,7 @@ export const router = t.router;
 export const publicProcedure = t.procedure;
 
 export const protectedProcedure = t.procedure.use((opts) => {
-  if (!opts.ctx.session) {
+  if (!opts.ctx.session || !opts.ctx.session.userId) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
       message: "User is not authenticated.",

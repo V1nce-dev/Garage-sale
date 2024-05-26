@@ -1,6 +1,6 @@
 {
-  "id": "6220cba4-6629-4861-aaf2-d1b08e25c056",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "3378a654-f5ab-4e06-a61a-a74cfa1ea23f",
+  "prevId": "6220cba4-6629-4861-aaf2-d1b08e25c056",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -77,6 +77,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "username": {
+          "name": "username",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "item_name": {
           "name": "item_name",
           "type": "varchar(255)",
@@ -127,6 +133,19 @@
           ],
           "columnsTo": [
             "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "items_username_users_username_fk": {
+          "name": "items_username_users_username_fk",
+          "tableFrom": "items",
+          "tableTo": "users",
+          "columnsFrom": [
+            "username"
+          ],
+          "columnsTo": [
+            "username"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"

@@ -22,16 +22,14 @@ const generateToken = async (id: string | null) => {
   }
 };
 
-export const getUserProfileRouter = router({
+export const userRouter = router({
   getUser: publicProcedure
     .input(
       z.object({
-        userId: z.string(),
+        userId: z.string().uuid(),
       })
     )
-    .mutation(async ({ input }) => {
-      const { userId } = input;
-
+    .mutation(async ({ input: { userId } }) => {
       if (!userId) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
@@ -52,10 +50,7 @@ export const getUserProfileRouter = router({
         });
       }
     }),
-});
-
-export const registerRouter = router({
-  user: publicProcedure
+  registerUser: publicProcedure
     .input(
       z.object({
         username: z.string(),
@@ -63,9 +58,7 @@ export const registerRouter = router({
         password: z.string(),
       })
     )
-    .mutation(async ({ input }) => {
-      const { username, email, password } = input;
-
+    .mutation(async ({ input: { username, email, password } }) => {
       if (!username || !email || !password) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -108,19 +101,14 @@ export const registerRouter = router({
         });
       }
     }),
-});
-
-export const authenticateRouter = router({
-  user: publicProcedure
+  authenticateUser: publicProcedure
     .input(
       z.object({
         email: z.string(),
         password: z.string(),
       })
     )
-    .mutation(async ({ input }) => {
-      const { email, password } = input;
-
+    .mutation(async ({ input: { email, password } }) => {
       if (!email || !password) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -128,11 +116,10 @@ export const authenticateRouter = router({
         });
       }
 
-      const result = await db
+      const [user] = await db
         .select()
         .from(users)
         .where(eq(users.email, email));
-      const user = result[0];
 
       const hashPassword = await bcrypt.compare(password, user.password);
 

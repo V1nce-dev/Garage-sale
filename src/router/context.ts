@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 interface JWTToken {
-  userId: string;
+  id: string;
 }
 
 export interface Session {
@@ -43,7 +43,7 @@ export const createContext = async (opts: CreateFastifyContextOptions) => {
       });
 
       session = {
-        userId: decodedToken.userId,
+        userId: decodedToken.id,
         jwtToken: token,
       };
     } catch (error) {
