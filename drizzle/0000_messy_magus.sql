@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS "cart" (
 CREATE TABLE IF NOT EXISTS "items" (
 	"item_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid,
+	"username" varchar,
 	"item_name" varchar(255) NOT NULL,
 	"item_description" text,
 	"item_price" integer NOT NULL,
@@ -48,6 +49,12 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "items" ADD CONSTRAINT "items_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "items" ADD CONSTRAINT "items_username_users_username_fk" FOREIGN KEY ("username") REFERENCES "public"."users"("username") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

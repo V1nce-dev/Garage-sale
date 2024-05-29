@@ -1,6 +1,6 @@
 import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { db } from "../../database/index";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { items } from "../../database/schema";
 import { users } from "../../database/schema";
 import { z } from "zod";
@@ -29,6 +29,8 @@ export const itemRouter = router({
 
     const products = await db
       .select({
+        userId: items.userId,
+        itemId: items.itemId,
         username: items.username,
         itemName: items.itemName,
         description: items.description,
@@ -123,19 +125,19 @@ export const itemRouter = router({
         itemId: z.string().uuid(),
       })
     )
-    .mutation(async ({ ctx }) => {
+    .mutation(async ({ input: { itemId }, ctx }) => {
       const userId = ctx.session.userId;
 
       const deleteItem = await db
         .delete(items)
-        .where(eq(items.userId, userId))
+        .where(and(eq(items.itemId, itemId), eq(items.userId, userId)))
         .returning();
-      if (deleteItem) {
-        return deleteItem;
+      if (deleteItem.length > 0) {
+        return deleteItem[0];
       } else {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Could not delete message",
+          message: "Could not delete item",
         });
       }
     }),

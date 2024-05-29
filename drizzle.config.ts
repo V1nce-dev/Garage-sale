@@ -3,8 +3,8 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 export default defineConfig({
-  schema: "./src/database/schema.ts",
   dialect: "postgresql",
+  schema: "./src/database/schema.ts",
   out: "./drizzle",
   dbCredentials: {
     url: process.env.DB_URL!,
