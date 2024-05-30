@@ -40,4 +40,8 @@ export const cart = pgTable("cart", {
   cartId: uuid("cart_id").defaultRandom().primaryKey(),
   userId: uuid("user_id").references(() => users.id),
   itemId: uuid("item_id").references(() => items.itemId),
+  itemName: varchar("item_name", { length: 255 }),
+  quantity: integer("quantity").default(1),
+  price: integer("item_price"),
+  image: text("image_url"),
 });

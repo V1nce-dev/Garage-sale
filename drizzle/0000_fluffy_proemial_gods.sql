@@ -1,7 +1,11 @@
 CREATE TABLE IF NOT EXISTS "cart" (
 	"cart_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid,
-	"item_id" uuid
+	"item_id" uuid,
+	"item_name" varchar(255),
+	"quantity" integer DEFAULT 1,
+	"item_price" integer,
+	"image_url" text
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "items" (
